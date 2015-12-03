@@ -34,8 +34,11 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
-
+  },
+  'POST /user' : 'User.create',
+  'GET  /user' : 'User.list',
+  'GET  /stock': 'Stock.index',
+  'POST /stock': 'Stock.add'
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
