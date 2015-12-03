@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 'use strict';
+var yahoo = require("yahoo-finance");
+
 module.exports = {
     add : function(req,res){
         var stock;
@@ -16,14 +18,10 @@ module.exports = {
                     .findOne(req.allParams()['user'])
             })
             .then(function(usr){
-                console.log("HERE 3");
-                console.log(usr);
                 usr.stocks.add(stock);
                 return usr.save();
             })
             .then(function(result){
-                console.log("HERE4");
-
                 return yahoo.snapshot({
                     symbol: req.allParams()['name'],
                     fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
