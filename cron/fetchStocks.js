@@ -4,13 +4,18 @@
 var yahoo = require('yahoo-finance');
 var Promise = require('bluebird');
 var Log = require('log');
+var colors = require('colors');
 var log = new Log('info');
-
+var running = false;
 module.exports = function(){
-    console.log("------------------------------START-------------------------------");
-    console.log("--------------"+(new Date).toString()+"-------------");
-    console.log("------------------------------------------------------------------");
-    sails.models.stock.find()
+    if(running) return;
+    running = true;
+    var results = [];
+    console.log("------------------------------START-------------------------------".green);
+    console.log("--------------".green+(new Date).toString().green+"-------------".green);
+    console.log("------------------------------------------------------------------".green);
+    sails.models.stock
+        .find()
         .then(function(stcks){
             log.info("Fetching Stocks %s found ", stcks.length);
             var stocks =
@@ -38,17 +43,30 @@ module.exports = function(){
                return val.name;
             });
             if(cleanedResults.length != result.length){
-                log.critical("Invalid Symbols Found: %s", _.unique(_.map(_.where(result,{name : null}),'symbol')));
+                log.critical("Invalid Symbols Found: %s".red, _.unique(_.map(_.where(result,{name : null}),'symbol')));
             }
             _.each(cleanedResults,function(val){
                 log.info("Information for stock %s (%s) : Price: %s",val.name,val.symbol,val.lastTradePriceOnly)
             });
-        }).catch(function(err){
+            results = cleanedResults;
+            return sails.models.user.find();
+        })
+        .then(function(users){
+            return Promise.all(_.map(users,function(){
+               //make the calls to  the microsoft service if the stocks are ...
+               //return the promise
+            }));
+        })
+        .then(function(){
+            // It's all done , if you want you can add functionality
+        })
+        .catch(function(err){
             log.error("Error %s",err);
-        }).finally(function(){
-            console.log("------------------------------------------------------------------");
-            console.log("--------------"+(new Date).toString()+"-------------");
-            console.log("-------------------------------END--------------------------------\n\n");
-
+        })
+        .finally(function(){
+            running = false;
+            console.log("------------------------------------------------------------------".green);
+            console.log("--------------".green+(new Date).toString().green+"-------------".green);
+            console.log("-------------------------------END--------------------------------\n\n".green);
         });
 };
