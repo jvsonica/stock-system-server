@@ -1,1 +1,3 @@
-# stock-system-server
+# cmov_
+
+a [Sails](http://sailsjs.org) application
