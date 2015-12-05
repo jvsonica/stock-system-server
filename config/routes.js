@@ -38,7 +38,9 @@ module.exports.routes = {
   'POST /user' : 'User.create',
   'GET  /user' : 'User.list',
   'GET  /stock': 'Stock.index',
-  'POST /stock': 'Stock.add'
+  'POST /stock': 'Stock.add',
+
+  'POST /login' : 'User.signIn' // Logs in with URI passed as parameter. Registers user if it doesn't exist
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
