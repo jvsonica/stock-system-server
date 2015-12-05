@@ -9,6 +9,7 @@ module.exports = {
 
   attributes: {
     name : {type : 'string', required: true},
+    symbol : {type : 'string', required: true},
     upper: {type : 'float' , required: true},
     lower: {type : 'float' , required: true},
     user : {model: 'user', required: true}

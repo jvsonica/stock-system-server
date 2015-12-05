@@ -20,8 +20,8 @@ module.exports = function(){
             log.info("Fetching Stocks %s found ", stcks.length);
             var stocks =
                 _.map(stcks,function(elem){
-                    if (elem.name)
-                        return elem.name;
+                    if (elem.symbol)
+                        return elem.symbol;
                     return null;
                 });
             stocks = _.filter(stocks,function(elem){
@@ -40,13 +40,13 @@ module.exports = function(){
         })
         .then(function(result){
             var cleanedResults = _.filter(result,function(val){
-               return val.name;
+               return val.symbol;
             });
             if(cleanedResults.length != result.length){
-                log.critical("Invalid Symbols Found: %s".red, _.unique(_.map(_.where(result,{name : null}),'symbol')));
+                log.critical("Invalid Symbols Found: %s".red, _.unique(_.map(_.where(result,{symbol : null}),'symbol')));
             }
             _.each(cleanedResults,function(val){
-                log.info("Information for stock %s (%s) : Price: %s",val.name,val.symbol,val.lastTradePriceOnly)
+                log.info("Information for stock %s (%s) : Price: %s",val.symbol,val.symbol,val.lastTradePriceOnly)
             });
             results = cleanedResults;
             return sails.models.user.find();
