@@ -8,54 +8,84 @@
 var yahoo = require("yahoo-finance");
 
 module.exports = {
-  add : function(req,res){
-    var stock;
+    add : function(req,res){
+        var stock;
 
-    // Fetch stock first to get stock name from symbol
-    yahoo.snapshot({
-      symbol: req.allParams()['symbol'],
-      fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
-    })
-      .then(function(result){
-        var params = req.allParams();
-        params.name = result.name;
-        return sails.models.stock.create(params)
-      })
-      .then(function(stk){
-        stock = stk;
-        return sails.models.user
-          .findOne(req.allParams()['user'])
-      })
-      .then(function(usr){
-        usr.stocks.add(stock);
-        return usr.save();
-      })
-      .then(function(result){
-        res.ok(stock);
-      })
-      .catch(function(err){
-        res.badRequest(err)
-      });
-  },
-  index : function(req,res){
-    return sails.models.stock.find().then(function(result){
-      res.send(result);
-    });
-    /*yahoo.snapshot({
-     symbol: 'IBM',
-     fields: ['a','b','b2','b3']
-     }).then(function(snapshot){
-     return res.send({
-     result : snapshot
-     });
+        // Fetch stock first to get stock name from symbol
+        yahoo.snapshot({
+            symbol: req.allParams()['symbol'],
+            fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
+        })
+            .then(function(result){
+                var params = req.allParams();
+                params.name = result.name;
+                return sails.models.stock.create(params)
+            })
+            .then(function(stk){
+                stock = stk;
+                return sails.models.user
+                    .findOne(req.allParams()['user'])
+            })
+            .then(function(usr){
+                usr.stocks.add(stock);
+                return usr.save();
+            })
+            .then(function(result){
+                res.ok(stock);
+            })
+            .catch(function(err){
+                res.badRequest(err)
+            });
+    },
+    index : function(req,res){
+        return sails.models.stock.find().then(function(result){
+            res.send(result);
+        });
+    },
+    patch: function(req,res){
+        var result;
+        sails.models.stock
+            .findOne({id:req.allParams().id})
+            .then(function(stock){
+                var nStock = _.assign(stock, req.allParams());
+                result = nStock;
+            })
+            .then(function(){
+                return yahoo.snapshot({
+                    symbol: result.symbol,
+                    fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
+                })
+            })
+            .then(function(stk){
+                result.name = stk.name;
+                result.save();
+            })
+            .then(function(){
+                return res.ok(result);
+            })
+            .catch(function(err){
+                return res.badRequest(err);
+            });
+    },
 
-     }).catch(function(err){
-     return res.send({
-     error: err
-     });
-     });*/
-  }
+    run : function(req,res){
+        require('cron/fetchStocks.js')().then(function(){
+            res.ok("OK");
+        })
+    },
 
+    currentPrice: function(req,res){
+        yahoo.snapshot({
+            symbol: req.allParams().symbol,
+            fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
+        })
+        .then(function(result){
+            res.send(result);
+        })
+        .catch(function(err){
+            res.badRequest(err);
+        })
+    }
 
 };
 

@@ -8,6 +8,7 @@
 module.exports = {
 
   attributes: {
+    notification : {type:'boolean',defaultsTo:false},
     name : {type : 'string', required: true},
     symbol : {type : 'string', required: true},
     upper: {type : 'float' , required: true},

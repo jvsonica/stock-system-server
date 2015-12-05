@@ -39,6 +39,7 @@ module.exports.routes = {
   'GET  /user' : 'User.list',
   'GET  /stock': 'Stock.index',
   'POST /stock': 'Stock.add',
+  'PATCH /stock/:id': 'Stock.patch',
 
   'POST /login' : 'User.signIn' // Logs in with URI passed as parameter. Registers user if it doesn't exist
   /***************************************************************************

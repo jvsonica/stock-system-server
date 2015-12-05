@@ -14,7 +14,7 @@ module.exports = function(){
     console.log("------------------------------START-------------------------------".green);
     console.log("--------------".green+(new Date).toString().green+"-------------".green);
     console.log("------------------------------------------------------------------".green);
-    sails.models.stock
+    return sails.models.stock
         .find()
         .then(function(stcks){
             log.info("Fetching Stocks %s found ", stcks.length);
