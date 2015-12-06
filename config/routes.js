@@ -42,7 +42,8 @@ module.exports.routes = {
   'PATCH /stock/:id': 'Stock.patch',
 
   'POST /login' : 'User.signIn', // Logs in with URI passed as parameter. Registers user if it doesn't exist
-  'GET /push' : 'User.pushTest'
+  'GET /user/:id/toast' : 'User.pushTestToast',
+  'GET /user/:id/tile' : 'User.pushTestTile'
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
