@@ -14,7 +14,6 @@ module.exports = function(){
 
   WNS.prototype.sendToast = function(uri, text1, text2, cb){
     // TODO: que template é o melhor para nós
-    console.log(uri);
     wns.sendToastText02(uri, text1, text2, options,
       function(err, result) {
         if (err) return cb(err, null);
