@@ -62,22 +62,36 @@ module.exports = {
       });
   },
 
-  pushTest: function(req,res){
-    var channel = req.query.uri;
+  pushTestToast: function(req,res){
+    sails.models.user.findOne(req.params.id)
+      .then(function(user){
+        if(user){
+          sails.services.wns.sendToast(user.uri,"Atenção","Notificação Stock",
+            function(err,result){
+              if(err) return res.badRequest(err);
+              else return res.ok(result);
+            });
+        }
+      })
+      .catch(function(err){
+        return res.badRequest(err);
+      });
+  },
 
-    var options = {
-      client_id: 'ms-app://s-1-15-2-862795636-3197699687-3641335729-4195230973-2611241766-1869636758-2860474146',
-      client_secret: 'hX1y67+ZuOxf/QLNO0z0rqLW4cA6q718'
-    };
-
-    wns.sendTileSquareBlock(channel, 'Yes!', 'It worked!', options, function (error, result) {
-      if (error){
-        return res.ok(error);
-      }
-      else{
-        return res.ok(result);
-      }
-    });
+  pushTestTile: function(req,res){
+    sails.models.user.findOne(req.params.id)
+      .then(function(user) {
+        if (user) {
+          sails.services.wns.sendTile(user.uri, "Nova Informação", "Stock com nova informação",
+            function (err, result) {
+              if(err) return res.badRequest(err);
+              else return res.ok(result);
+            });
+        }
+      })
+      .catch(function(err){
+        return res.badRequest(err);
+      });
   },
 
   list : function(req,res){
