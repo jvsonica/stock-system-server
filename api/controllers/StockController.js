@@ -61,7 +61,10 @@ module.exports = {
                 result.save();
             })
             .then(function(){
-                return res.ok(result);
+                sails.models.stock.find({id:req.allParams().id})
+            })
+            .then(function(stock){
+                return res.ok(stock);
             })
             .catch(function(err){
                 return res.badRequest(err);
