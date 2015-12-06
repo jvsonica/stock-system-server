@@ -10,13 +10,14 @@ var yahoo = require("yahoo-finance");
 module.exports = {
     add : function(req,res){
         var stock;
-
+        var yStock;
         // Fetch stock first to get stock name from symbol
         yahoo.snapshot({
             symbol: req.allParams()['symbol'],
             fields: ['s', 'n', 'd1', 'l1', 'y', 'r']
         })
             .then(function(result){
+                yStock = result;
                 var params = req.allParams();
                 params.name = result.name;
                 return sails.models.stock.create(params)
@@ -31,6 +32,7 @@ module.exports = {
                 return usr.save();
             })
             .then(function(result){
+                stock.price = yStock.lastTradePriceOnly;
                 res.ok(stock);
             })
             .catch(function(err){
