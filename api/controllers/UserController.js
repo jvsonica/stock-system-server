@@ -66,15 +66,15 @@ module.exports = {
     sails.models.user.findOne(req.params.id)
       .then(function(user){
         if(user){
-          sails.services.wns.sendToast(user.uri,"Atenção","Notificação Stock",
+          sails.services.wns.sendToast(user.uri,"Stock Alert", "AAPL está agora a XX.XXX",
             function(err,result){
-              if(err) return res.badRequest(err);
+              if(err) return res.ok(err);
               else return res.ok(result);
             });
         }
       })
       .catch(function(err){
-        return res.badRequest(err);
+        return res.ok(err);
       });
   },
 
@@ -82,15 +82,16 @@ module.exports = {
     sails.models.user.findOne(req.params.id)
       .then(function(user) {
         if (user) {
-          sails.services.wns.sendTile(user.uri, "Nova Informação", "Stock com nova informação",
+          sails.services.wns.sendTile(user.uri,
+            "Texto1", "Texto2",
             function (err, result) {
-              if(err) return res.badRequest(err);
+              if(err) return res.ok(err);
               else return res.ok(result);
             });
         }
       })
       .catch(function(err){
-        return res.badRequest(err);
+        return res.ok(err);
       });
   },
 

@@ -62,8 +62,8 @@ module.exports = function(){
               // Toast de Acima do Máximo
               log.info("Over Upper Bound Warning for stock "+ results[i].symbol + " for user " + stock.user.id + " who had upper bound set on " +  stock.upper);
               sails.services.wns.sendToast(stock.user.uri,
-                "Alerta",
-                "Stocks de " + stock.symbol + " estão agora a " + results[i].lastTradePriceOnly+".",
+                "Limite superior excedido!",
+                "Valor de "+ stock.symbol+" é agora " + results[i].lastTradePriceOnly,
                 function(err,result){}
               );
             }
@@ -71,16 +71,16 @@ module.exports = function(){
               // Toast de Abaixo do Mínimo
               log.info("Below Lower Bound Warning for stock "+ results[i].symbol + " for user " + stock.user.id + " who had lower bound set on " +  stock.lower);
               sails.services.wns.sendToast(stock.user.uri,
-                "Alerta",
-                "Stocks de " + stock.symbol + " estão agora a " + results[i].lastTradePriceOnly+".",
+                "Limite inferior excedido!",
+                "Valor de "+ stock.symbol+" é agora " + results[i].lastTradePriceOnly,
                 function(err,result){}
               );
             }
             // Issue de tile
             log.info("Tile warning "+ results[i].symbol + " for user " + stock.user.id);
             sails.services.wns.sendTile(stock.user.uri,
-              "Nova Informação",
-              "Stock com nova informação",
+              results[i].symbol,
+              ""+results[i].lastTradePriceOnly,
               function(err,result){}
             );
           }

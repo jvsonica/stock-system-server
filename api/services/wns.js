@@ -13,7 +13,6 @@ module.exports = function(){
   };
 
   WNS.prototype.sendToast = function(uri, text1, text2, cb){
-    // TODO: que template é o melhor para nós
     wns.sendToastText02(uri, text1, text2, options,
       function(err, result) {
         if (err) return cb(err, null);
@@ -25,15 +24,14 @@ module.exports = function(){
   };
 
   WNS.prototype.sendTile = function(uri, text1, text2, cb){
-    // TODO: ver que tile queremos
-    wns.sendTileSquareBlock(uri, text1, text2, options,
+    wns.sendTileSquareText02(uri, text1, text2, options,
       function (err, result) {
         if (err) return cb(err, null);
         else {
           if (result.newAccessToken) options.accessToken = result.newAccessToken;
-          cb(null,result);
+          cb(null, result);
         }
-      });
+      })
   };
 
   return new WNS();
